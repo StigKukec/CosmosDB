@@ -1,0 +1,145 @@
+﻿@model App.Models.VMPerson
+
+@{
+    ViewData["Title"] = "Edit";
+}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<h1>Edit</h1>
+
+<h4>VMPerson</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IDPerson" class="control-label"></label>
+                <input asp-for="IDPerson" readonly class="form-control" />
+                <span asp-validation-for="IDPerson" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Contact" class="control-label"></label>
+                <button id="openModalBtn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                    Add contact
+                </button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                            </div>
+                            <div class="modal-body">
+                                <label>Contact</label>
+                                <input type="text" id="contact" placeholder="Contact...">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="closeModal" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="addContact">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                <div id="contacts"></div>
+                <hr />
+                <button id="deleteAllContacts" type="button" class="btn btn-primary">
+                    Delete all contacts
+                </button>
+            </div>
+            <div class="form-group">
+                <label asp-for="Country" class="control-label"></label>
+                <input asp-for="Country" class="form-control" />
+                <span asp-validation-for="Country" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Adress" class="control-label"></label>
+                <input asp-for="Adress" class="form-control" />
+                <span asp-validation-for="Adress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfBirth" class="control-label"></label>
+                <input asp-for="DateOfBirth" class="form-control" />
+                <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" id="storedContacts" name="storedContacts" />
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+<script>
+    var contactArray = [];
+    $(document).ready(function () {
+        $('#openModalBtn').click(function () {
+            $('#exampleModal').modal('show');
+            $('#myInput').focus();
+        });
+    });
+    $('#closeModal').click(function () {
+        $('#exampleModal').modal('hide');
+    });
+
+    $('#addContact').click(function () {
+        contactArray.push(contact.value);
+        var displayContact = "";
+        for (var i = 0; i < contactArray.length; i++) {
+
+            if (i == (contactArray.length - 1)) {
+                displayContact += (contactArray[i]);
+            }
+            else {
+                displayContact += (contactArray[i] + ",");
+            }
+        }
+
+        $('#contacts').empty();
+        $('#contacts').append(displayContact);
+        $('#exampleModal').modal('hide');
+    });
+
+    $('#save').click(function () {
+        var displayContact = "";
+        for (var i = 0; i < contactArray.length; i++) {
+
+            if (i == (contactArray.length - 1)) {
+                displayContact += (contactArray[i]);
+            }
+            else {
+                displayContact += (contactArray[i] + ",");
+            }
+        }
+        document.getElementById("storedContacts").value = displayContact;
+    });
+
+    $('#deleteAllContacts').click(function () {
+        contactArray = [];
+        $('#contacts').empty();
+    });
+</script>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
